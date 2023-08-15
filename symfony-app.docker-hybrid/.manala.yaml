@@ -1,9 +1,10 @@
 manala:
-    description: Wamiz - Symfony application using a Docker-hybrid stack
+    description: Symfony application using a Docker-hybrid stack
     template: .manala.yaml.tmpl
     sync:
         - .manala/
         - docker-compose.yaml.tmpl
+        - docker-compose.override.yaml.tmpl
         - php.ini.tmpl
 
 system:
@@ -22,9 +23,17 @@ system:
         #     }
         # }
         configs: []
+    mysql:
+        # @option {"label": "MySQL version"}
+        # @schema {"enum": [null, "8.0", 5.7]}
+        version: ~
+        # @schema {"type": ["string", "null"]}
+        init: ~
+        # @schema {"type": ["string", "null"]}
+        additional_config:
     mariadb:
         # @option {"label": "MariaDB version"}
-        # @schema {"enum": [null, 10.3, 10.4, 10.5, 10.6]}
+        # @schema {"enum": [null, 10.11, 10.6, 10.5, 10.4, 10.3, 10.2, 10.1]}
         version: ~
         # @schema {"type": ["string", "null"]}
         init: ~

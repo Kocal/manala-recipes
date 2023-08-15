@@ -1,4 +1,4 @@
-{{- $has_mariadb := .Vars.system.mariadb.version -}}
+{{- $has_database := .Vars.system.mysql.version or .Vars.system.mariadb.version -}}
 {{- $has_redis := .Vars.system.redis.version -}}
 {{- $has_mailcatcher := .Vars.system.mailcatcher.version -}}
 
@@ -26,10 +26,10 @@ composer := $(symfony) composer
 
 APP_NAME := {{ .Vars.system.app_name }}
 APP_DOMAINS := $(APP_NAME)
-MANDATORY_CONTAINERS := {{- if $has_mariadb }} database{{ end }}
+MANDATORY_CONTAINERS := {{- if $has_database }} database{{ end }}
                         {{- if $has_redis }} redis{{ end }}
                         {{- if $has_mailcatcher }} mailcatcher{{ end }}
-USE_DOCKER = {{ if or ($has_mariadb) ($has_redis) ($has_mailcatcher) }}true{{ else }}false{{ end }}
+USE_DOCKER = {{ if or ($has_database) ($has_redis) ($has_mailcatcher) }}true{{ else }}false{{ end }}
 
 HELP += $(call help_section, Environment)
 
@@ -72,7 +72,7 @@ _start:
 	fi
 
 _wait_for_database:
-{{- if $has_mariadb }}
+{{- if $has_database }}
 	@if [ "$(USE_DOCKER)" = "true" ]; then \
 		$(call message_warning, Waiting for the database to be ready...); \
 		until docker inspect -f {{ "{{.State.Health.Status}}" }} `$(dc) ps -q database` | grep -q "healthy"; do \
@@ -117,7 +117,7 @@ down: stop
 
 HELP += $(call help_section, Development tools)
 
-{{ if $has_mariadb -}}
+{{ if $has_database -}}
 HELP += $(call help,run-phpmyadmin,    Start a web interface for PhpMyAdmin)
 run-phpmyadmin:
 	@if [ "$(USE_DOCKER)" = "false" ]; then \
