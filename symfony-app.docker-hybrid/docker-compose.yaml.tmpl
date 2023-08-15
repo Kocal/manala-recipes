@@ -26,7 +26,7 @@ services:
 {{- $mariadb := .Vars.system.mariadb }}
 
   database:
-    image: {{- if $mysql.version }}'mysql:{{ $mysql.version }}'{{ else }}'mariadb:{{ $mariadb.version }}'{{ end }}
+    image: {{ if $mysql.version }}'mysql:{{ $mysql.version }}'{{ else }}'mariadb:{{ $mariadb.version }}'{{ end }}
     command: --max_allowed_packet=1024M
     environment:
       MYSQL_USER: 'app'
@@ -36,7 +36,6 @@ services:
       TZ: {{ .Vars.system.timezone }}
     volumes:
       - db-data:/var/lib/mysql
-      - .manala/init-db:/docker-entrypoint-initdb.d
       {{- if $mysql.version }}
       - .manala/init-db:/docker-entrypoint-initdb.d
       {{- else }}
