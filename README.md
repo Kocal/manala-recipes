@@ -1,6 +1,6 @@
 # manala-recipes
 
-[Manala](https://manala.github.io/manala/) recipes for Wamiz.
+[Manala](https://manala.github.io/manala/) recipes for applications.
 
 ## Requirements
 
